@@ -12,9 +12,6 @@ class AddDailyStatusComponent extends React.Component {
     let first = curr.getDate(); // First day is the day of the month - the day of the week
     let last = first - 6; // last day is the first day + 6
 
-    let firstday = new Date(curr.setDate(first));
-    let lastday = new Date(curr.setDate(last));
-
     for ( let i = 0; i < 7; i++) {
       let day = new Date(curr.setDate(first - i));
       datesArr.push(day.getDate() + "/" + (day.getMonth() + 1) + "/" + day.getFullYear());
@@ -25,7 +22,7 @@ class AddDailyStatusComponent extends React.Component {
         projectsArr = [];
 
     for ( let i = 0; i < projectsJson.length; i++) {
-       projectsArr.push(projectsJson[i].name);
+       projectsArr.push(projectsJson[i]);
     }
 
     // Populate the activity types
@@ -33,7 +30,7 @@ class AddDailyStatusComponent extends React.Component {
         activityTypeArr = [];
 
     for ( let i = 0; i < activityTypeJson.length; i++) {
-       activityTypeArr.push(activityTypeJson[i].name);
+       activityTypeArr.push(activityTypeJson[i]);
     }
 
     this.state = {
