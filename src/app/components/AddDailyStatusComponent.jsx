@@ -51,26 +51,15 @@ class AddDailyStatusComponent extends React.Component {
   };
 
   render() {
-    const dates =  this.state.dateOptions.map((date) =>
-      <option key={date}>{date}</option>
-    );
-
-    const projects =  this.state.projects.map((project) =>
-      <option key={project}>{project}</option>
-    );
-
-    const activityTypes =  this.state.activityTypes.map((activity) =>
-      <option key={activity}>{activity}</option>
-    );
-
-    const hours = ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"],
-      hoursSpend = hours.map((hour) =>
-        <option key={hour}>{hour}</option>
+    let getOptions = (arraySet) => {
+      let options = arraySet.map((item) =>
+        <option key={item}>{item}</option>
       );
-    const minutes = ["00", "05", "30", "45"],
-      minutesSpend = minutes.map((minutes) =>
-        <option key={minutes}>{minutes}</option>
-      );
+      return options;
+    };
+    const hours = ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+      
+    const minutes = ["00", "05", "30", "45"];
 
     return (
       <div>
@@ -80,23 +69,23 @@ class AddDailyStatusComponent extends React.Component {
           <div className="colWrapper">
             <div className="col2">
               <label>Date</label>
-              <select>{dates}</select>
+              <select>{getOptions(this.state.dateOptions)}</select>
             </div>
 
             <div className="col4">
               <label>Project</label>
-              <select>{projects}</select>
+              <select>{getOptions(this.state.projects)}</select>
             </div>
 
             <div className="col2">
               <label>Activity Type</label>
-              <select>{activityTypes}</select>
+              <select>{getOptions(this.state.activityTypes)}</select>
             </div>
 
             <div className="col2 time">
               <label>Time Spent (hours:minutes)</label>
-              <select>{hoursSpend}</select>
-              <select>{minutesSpend}</select>
+              <select>{getOptions(hours)}</select>
+              <select>{getOptions(minutes)}</select>
             </div>
           </div>
           <div className="saveBtnDiv">
