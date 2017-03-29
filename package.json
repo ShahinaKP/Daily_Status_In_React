@@ -1,0 +1,40 @@
+{
+  "name": "daily_status_report_reactjs",
+  "version": "1.0.0",
+  "description": "daily status report in reactjs",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rimraf build/*",
+    "prod": "cross-env NODE_ENV=production webpack",
+    "build": "npm run clean && npm run prod",
+    "start": "cross-env NODE_ENV=development webpack-dev-server"
+  },
+  "author": "Shahina",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.23.1",
+    "babel-loader": "^6.3.2",
+    "babel-preset-env": "^1.1.8",
+    "babel-preset-react": "^6.23.0",
+    "cross-env": "^3.1.4",
+    "css-loader": "^0.26.1",
+    "eslint": "^3.16.0",
+    "extract-text-webpack-plugin": "2.0.0",
+    "file-loader": "^0.10.0",
+    "image-webpack-loader": "^3.2.0",
+    "node-sass": "^4.5.0",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "rimraf": "^2.6.0",
+    "sass-loader": "^6.0.2",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.4.1"
+  },
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.2.1",
+    "react-bootstrap": "^0.30.8"
+  }
+}
