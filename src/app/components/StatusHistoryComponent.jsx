@@ -1,13 +1,14 @@
 import React from "react";
 
+import "../scss/historyComponent.scss";
+
 class StatusHistoryComponent extends React.Component {
   render() {
     const activities =  this.props.activities.map((activity) =>
-		<li key={activity}>{activity}</li>
-  	  );
-  	
+      <li key={activity}>{activity}</li>
+    );
     return (
-      <div>
+      <div className="activityListWrapper">
         <ul>{activities}</ul>
       </div>
     );

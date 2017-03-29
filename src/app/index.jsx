@@ -1,6 +1,8 @@
 import React from "react";
 import {render} from "react-dom";
 
+import Header from "./components/Header.jsx";
+import Footer from "./components/Footer.jsx";
 import AddDailyStatusComponent from "./components/AddDailyStatusComponent.jsx";
 import StatusHistoryComponent from "./components/StatusHistoryComponent.jsx";
 
@@ -16,6 +18,7 @@ class App extends React.Component {
    }
 
    activityLisiting(activity) {
+     debugger;
      this.setState({activities: this.state.activities.concat([activity])});
    };
 
@@ -23,9 +26,10 @@ class App extends React.Component {
    render () {
      return (
 		<div>
-			<h1> Daily Status</h1>
+			<Header />
 			<AddDailyStatusComponent onCreateActivity={this.activityLisiting.bind(this)}/>
 			<StatusHistoryComponent activities={this.state.activities}/>
+      <Footer />
 		</div>
 		);
   }

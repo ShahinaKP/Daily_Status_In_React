@@ -1,0 +1,14 @@
+body {
+	font-family: "Open Sans",Arial,Helvetica,Sans-Serif;
+	margin: 0;
+	.header, .footer {
+	    background-color: #2C3742;
+	    padding: 30px;
+	}
+
+	.footer {
+	    position: fixed;
+	    bottom: 0;
+	    width: 100%;
+	}
+}
