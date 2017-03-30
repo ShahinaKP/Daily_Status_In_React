@@ -18,7 +18,6 @@ class App extends React.Component {
    }
 
    activityLisiting(activity) {
-     debugger;
      this.setState({activities: this.state.activities.concat([activity])});
    };
 

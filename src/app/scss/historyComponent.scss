@@ -1,4 +1,41 @@
 .activityListWrapper {
 	float: left;
-	width: 100%;
+    margin: 20px;
+	width: 96.5%;
+	ul {
+	    display: flex;
+	    flex-direction: column;
+	    margin: 0;
+	    padding: 0;
+	    list-style: none;
+	    li {
+	        border: 1px solid #ddd;
+		    background: #fbfbfb;
+		    padding: 25px 15px;
+		    display: flex;
+		    margin-bottom: 20px;
+    		.col2 {
+    			width: 16%;
+    			height: 55px;
+    			border-right: 1px solid #ddd;
+    			span {
+    				float: left;
+    				padding-bottom: 10px;
+    				width: 100%;
+    			}
+    			&.right {
+    				border-left: 1px solid #ddd;
+    				border-right: 0;
+    				padding-left: 15px
+    			}
+    		}
+    		.col6 {
+    			width: 68%;
+    			padding: 0 15px;    			
+    		}
+
+
+
+	    }
+	}
 }

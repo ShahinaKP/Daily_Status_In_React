@@ -6,6 +6,9 @@ class AddDailyStatusComponent extends React.Component {
   constructor(props) {
     super(props);
 
+    this.selHr = "01";
+    this.selMin = "00";
+
     // Populate the last 7 days dates
     let datesArr = [];
     let curr = new Date; // get current date
@@ -18,36 +21,67 @@ class AddDailyStatusComponent extends React.Component {
     }
 
     // Populate the projects
-    let projectsJson = require("../assets/json/projects.json"),
-        projectsArr = [];
-
-    for ( let i = 0; i < projectsJson.length; i++) {
-       projectsArr.push(projectsJson[i]);
-    }
-
-    // Populate the activity types
-    let activityTypeJson = require("../assets/json/activityTypes.json"),
+    let statusInputJson = require("../assets/json/statusInput.json"),
+        projectsArr = [],
         activityTypeArr = [];
 
-    for ( let i = 0; i < activityTypeJson.length; i++) {
-       activityTypeArr.push(activityTypeJson[i]);
+    let projectsLength = statusInputJson.projects.length;
+    for ( let i = 0; i < projectsLength; i++) {
+       projectsArr.push(statusInputJson.projects[i]);
+    }
+
+    // Populate the activity types 
+    let activityTypesLength = statusInputJson.activityTypes.length;
+    for ( let i = 0; i < activityTypesLength; i++) {
+       activityTypeArr.push(statusInputJson.activityTypes[i]);
     }
 
     this.state = {
-      activity : "Activity Added",
       dateOptions: datesArr,
       projects: projectsArr,
-      activityTypes: activityTypeArr
+      activityTypes: activityTypeArr,
+      selDate: datesArr[0],
+      selProj: projectsArr[0],
+      selActType: activityTypeArr[0],
+      selTimeSpend: "01:00"
     };
   }
 
-  onAddActivity() {
-        let myActivity =  this.state.activity;
-        this.props.onCreateActivity(myActivity);
+  onChangeHandler(item, event) {
+    let timeSpend;
+    switch (item) {
+      case "date":
+        this.setState({selDate: event.target.value});
+        break;
+
+      case "project":
+        this.setState({selProj: event.target.value});
+        break;
+
+      case "actType":
+        this.setState({selActType: event.target.value});
+        break;
+
+      case "hrSpend":
+        this.selHr =  event.target.value;
+        timeSpend = this.selHr + ":" + this.selMin;
+        this.setState({selTimeSpend: timeSpend});
+        break;
+
+      case "minSpend":
+        this.selMin =  event.target.value;
+        timeSpend = this.selHr + ":" + this.selMin;
+        this.setState({selTimeSpend: timeSpend});
+        break;
+    }
   };
 
-  onInputChange(event) {
-    this.setState({activity: event.target.value});
+  onAddActivity() {
+    let myActivity =  { "date": this.state.selDate,
+                        "project": this.state.selProj,
+                        "actType": this.state.selActType,
+                        "timeSpend": this.state.selTimeSpend};
+    this.props.onCreateActivity(myActivity);
   };
 
   render() {
@@ -57,8 +91,7 @@ class AddDailyStatusComponent extends React.Component {
       );
       return options;
     };
-    const hours = ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
-      
+    const hours = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
     const minutes = ["00", "05", "30", "45"];
 
     return (
@@ -69,23 +102,23 @@ class AddDailyStatusComponent extends React.Component {
           <div className="colWrapper">
             <div className="col2">
               <label>Date</label>
-              <select>{getOptions(this.state.dateOptions)}</select>
+              <select value={this.state.selDate} onChange={this.onChangeHandler.bind(this, "date")}>{getOptions(this.state.dateOptions)}</select>
             </div>
 
             <div className="col4">
               <label>Project</label>
-              <select>{getOptions(this.state.projects)}</select>
+              <select value={this.state.selProj} onChange={this.onChangeHandler.bind(this, "project")}>{getOptions(this.state.projects)}</select>
             </div>
 
             <div className="col2">
               <label>Activity Type</label>
-              <select>{getOptions(this.state.activityTypes)}</select>
+              <select value={this.state.selActType} onChange={this.onChangeHandler.bind(this, "actType")}>{getOptions(this.state.activityTypes)}</select>
             </div>
 
             <div className="col2 time">
               <label>Time Spent (hours:minutes)</label>
-              <select>{getOptions(hours)}</select>
-              <select>{getOptions(minutes)}</select>
+              <select value={this.selHr} onChange={this.onChangeHandler.bind(this, "hrSpend")}>{getOptions(hours)}</select>
+              <select value={this.selMin} onChange={this.onChangeHandler.bind(this, "minSpend")}>{getOptions(minutes)}</select>
             </div>
           </div>
           <div className="saveBtnDiv">
