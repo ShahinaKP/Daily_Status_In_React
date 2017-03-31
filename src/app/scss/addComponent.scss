@@ -77,7 +77,8 @@ h1 {
 			cursor: pointer;
 		    background-color: #3276b1;
 		    border: 1px solid #3276b1;
-		    padding: 7px;
+		    border-radius: 2px;
+    		padding: 7px 22px;
 		    font-size: 14px;
 		    &:disabled {
 		    	color: #404040;

@@ -13,7 +13,7 @@ class AddDailyStatusComponent extends React.Component {
     let last = first - 6; // last day is the first day + 6
 
     for ( let i = 0; i < 7; i++) {
-      let day = new Date(curr.setDate(first - i));
+      let day = new Date(curr.setDate(last + i));
       datesArr.push(day.getDate() + "/" + (day.getMonth() + 1) + "/" + day.getFullYear());
     }
 
@@ -33,15 +33,20 @@ class AddDailyStatusComponent extends React.Component {
        activityTypeArr.push(statusInputJson.activityTypes[i]);
     }
 
+    const hoursArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16"];
+    const minutesArr = ["00", "15", "30", "45"];
+
     this.state = {
       dateOptions: datesArr,
       projects: projectsArr,
       activityTypes: activityTypeArr,
-      date: datesArr[0],
+      hoursArr: hoursArr,
+      minutesArr: minutesArr,
+      date: datesArr[6],
       project: projectsArr[0],
       actType: activityTypeArr[0],
-      hrSpend: "01",
-      minSpend: "00",
+      hrSpend: hoursArr[7],
+      minSpend: minutesArr[0],
       description: ""
 
     };
@@ -66,6 +71,68 @@ class AddDailyStatusComponent extends React.Component {
                         };
     this.props.onCreateActivity(myActivity);
     this.setState({"description": ""});
+    this.setDateTime();
+  };
+
+  // set Date and Time after adding status
+  setDateTime() {
+    let actArr = this.props.activities;
+    let dateIndex = this.state.dateOptions.indexOf(this.state.date);
+    if (dateIndex !== 6) {
+      if (parseInt(this.state.hrSpend) < 8) {
+        if (actArr.length) {
+          if (actArr[0].date === this.state.date) {
+            let totoalHr = parseInt(actArr[0].hrSpend) + parseInt(this.state.hrSpend);
+            let totoalMin = parseInt(actArr[0].minSpend) + parseInt(this.state.minSpend);
+            if (totoalMin === 60) {
+              totoalHr++;
+              totoalMin = "00";
+            }
+
+            if (totoalHr < 8) {
+              let tempHr = "0" + totoalHr;
+              let tempMin = totoalMin;
+
+              if (tempMin === "00" ||  tempMin === 0) {
+                this.setState({hrSpend: "0" + ( 8 - parseInt (tempHr))});
+              }
+              else {
+                this.setState({hrSpend: "0" + ( 7 - parseInt (tempHr)),
+                               minSpend: 60 - parseInt( tempMin)});
+              }
+            }
+            else {
+              this.setState({date: this.state.dateOptions[dateIndex + 1],
+                             hrSpend: this.state.hoursArr[7],
+                             minSpend: this.state.minutesArr[0]});
+            }
+          }
+          else {
+            this.changeHrMin();
+          }
+        }
+        else {
+          this.changeHrMin();
+        }
+      }
+      else {
+        this.setState({date: this.state.dateOptions[dateIndex + 1]});
+      }
+    }
+    else {
+      this.setState({hrSpend: this.state.hoursArr[7],
+                     minSpend: this.state.minutesArr[0]});
+    }
+  };
+
+  changeHrMin() {
+    if (this.state.minSpend === "00" ) {
+      this.setState({hrSpend: "0" + ( 8 - parseInt (this.state.hrSpend))});
+    }
+    else {
+      this.setState({hrSpend: "0" + ( 7 - parseInt (this.state.hrSpend)),
+                     minSpend: 60 - parseInt( this.state.minSpend)});
+    }
   };
 
   render() {
@@ -75,8 +142,6 @@ class AddDailyStatusComponent extends React.Component {
       );
       return options;
     };
-    const hours = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
-    const minutes = ["00", "05", "30", "45"];
 
     return (
       <div>
@@ -101,8 +166,8 @@ class AddDailyStatusComponent extends React.Component {
 
             <div className="col2 time">
               <label>Time Spent (hours:minutes)</label>
-              <select value={this.state.hrSpend} name="hrSpend" onChange={this.onChangeHandler}>{getOptions(hours)}</select>
-              <select value={this.state.minSpend} name="minSpend" onChange={this.onChangeHandler}>{getOptions(minutes)}</select>
+              <select value={this.state.hrSpend} name="hrSpend" onChange={this.onChangeHandler}>{getOptions(this.state.hoursArr)}</select>
+              <select value={this.state.minSpend} name="minSpend" onChange={this.onChangeHandler}>{getOptions(this.state.minutesArr)}</select>
             </div>
           </div>
 
@@ -120,7 +185,7 @@ class AddDailyStatusComponent extends React.Component {
             </div>
           </div>
           <div className="saveBtnDiv">
-            <button onClick={this.onAddActivity} disabled={!this.state.description}>Add Daily Status</button>
+            <button onClick={this.onAddActivity} disabled={!this.state.description}>Save</button>
           </div>
       </div>
       </div>

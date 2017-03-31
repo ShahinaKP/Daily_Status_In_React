@@ -18,7 +18,9 @@ class App extends React.Component {
    }
 
    activityLisiting(activity) {
-     this.setState({activities: this.state.activities.concat([activity])});
+     const newArr = this.state.activities.slice();
+     newArr.unshift(activity);
+     this.setState({activities: newArr});
    };
 
 
@@ -26,7 +28,7 @@ class App extends React.Component {
      return (
 		<div>
 			<Header />
-			<AddDailyStatusComponent onCreateActivity={this.activityLisiting.bind(this)}/>
+			<AddDailyStatusComponent onCreateActivity={this.activityLisiting.bind(this)} activities={this.state.activities}/>
 			<StatusHistoryComponent activities={this.state.activities}/>
       <Footer />
 		</div>
