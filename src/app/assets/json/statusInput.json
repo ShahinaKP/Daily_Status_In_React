@@ -1,0 +1,45 @@
+{
+	"projects" :
+		[
+			"N/A",
+			"PrivateFly",
+			"PlannerPad Annual Maintenance",	
+			"Space",
+			"DeSilva",
+			"Network Solutions",
+			"Mobomo Projects",
+			"Buzzbuzzhome",
+			"Altum Easygrants",
+			"Innolance Mobile",
+			"Amazon Hosting and Support",
+			"Indian Defence Review Website",
+			"Gist Digital Projects",
+			"Lulu Hypermarket(Tech Support+Security)",
+			"Bozzuto SharePoint",
+			"Savenia Infrastructure support",
+			"StayNTouch PMS",
+			"Space Sales Tracker - Phase1",
+			"Zivebox Development",
+			"BCtA Website Development",
+			"Sunny Diamonds e-Commerce Platform"
+		],	
+
+	"activityTypes" :
+		[
+			"Project management",
+			"Training",
+			"Architecting",
+			"Requirements analysis",
+			"System design",
+			"Coding",
+			"Graphic design",
+			"Testing",
+			"HTML/CSS",
+			"Pre-sales",
+			"Tech Support",
+			"UX design",
+			"Marketing",
+			"Business Analysis",
+			"Recruitment &amp; HR"
+		]	
+}
