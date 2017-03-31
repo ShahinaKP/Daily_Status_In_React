@@ -6,9 +6,6 @@ class AddDailyStatusComponent extends React.Component {
   constructor(props) {
     super(props);
 
-    this.selHr = "01";
-    this.selMin = "00";
-
     // Populate the last 7 days dates
     let datesArr = [];
     let curr = new Date; // get current date
@@ -40,47 +37,33 @@ class AddDailyStatusComponent extends React.Component {
       dateOptions: datesArr,
       projects: projectsArr,
       activityTypes: activityTypeArr,
-      selDate: datesArr[0],
-      selProj: projectsArr[0],
-      selActType: activityTypeArr[0],
-      selTimeSpend: "01:00"
+      date: datesArr[0],
+      project: projectsArr[0],
+      actType: activityTypeArr[0],
+      hrSpend: "01",
+      minSpend: "00",
+      description: ""
+
     };
-  }
 
-  onChangeHandler(item, event) {
-    let timeSpend;
-    switch (item) {
-      case "date":
-        this.setState({selDate: event.target.value});
-        break;
+    this.onChangeHandler = this.onChangeHandler.bind(this);
+    this.onAddActivity = this.onAddActivity.bind(this);
+  };
 
-      case "project":
-        this.setState({selProj: event.target.value});
-        break;
-
-      case "actType":
-        this.setState({selActType: event.target.value});
-        break;
-
-      case "hrSpend":
-        this.selHr =  event.target.value;
-        timeSpend = this.selHr + ":" + this.selMin;
-        this.setState({selTimeSpend: timeSpend});
-        break;
-
-      case "minSpend":
-        this.selMin =  event.target.value;
-        timeSpend = this.selHr + ":" + this.selMin;
-        this.setState({selTimeSpend: timeSpend});
-        break;
-    }
+  onChangeHandler(event) {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
   };
 
   onAddActivity() {
-    let myActivity =  { "date": this.state.selDate,
-                        "project": this.state.selProj,
-                        "actType": this.state.selActType,
-                        "timeSpend": this.state.selTimeSpend};
+    let myActivity =  { "date": this.state.date,
+                          "project": this.state.project,
+                          "actType": this.state.actType,
+                          "hrSpend": this.state.hrSpend,
+                          "minSpend": this.state.minSpend,
+                          "description": this.state.description
+                        };
     this.props.onCreateActivity(myActivity);
   };
 
@@ -102,27 +85,41 @@ class AddDailyStatusComponent extends React.Component {
           <div className="colWrapper">
             <div className="col2">
               <label>Date</label>
-              <select value={this.state.selDate} onChange={this.onChangeHandler.bind(this, "date")}>{getOptions(this.state.dateOptions)}</select>
+              <select value={this.state.date} name="date" onChange={this.onChangeHandler}>{getOptions(this.state.dateOptions)}</select>
             </div>
 
             <div className="col4">
               <label>Project</label>
-              <select value={this.state.selProj} onChange={this.onChangeHandler.bind(this, "project")}>{getOptions(this.state.projects)}</select>
+              <select value={this.state.project} name="project" onChange={this.onChangeHandler}>{getOptions(this.state.projects)}</select>
             </div>
 
             <div className="col2">
               <label>Activity Type</label>
-              <select value={this.state.selActType} onChange={this.onChangeHandler.bind(this, "actType")}>{getOptions(this.state.activityTypes)}</select>
+              <select value={this.state.actType} name="actType" onChange={this.onChangeHandler}>{getOptions(this.state.activityTypes)}</select>
             </div>
 
             <div className="col2 time">
               <label>Time Spent (hours:minutes)</label>
-              <select value={this.selHr} onChange={this.onChangeHandler.bind(this, "hrSpend")}>{getOptions(hours)}</select>
-              <select value={this.selMin} onChange={this.onChangeHandler.bind(this, "minSpend")}>{getOptions(minutes)}</select>
+              <select value={this.state.hrSpend} name="hrSpend" onChange={this.onChangeHandler}>{getOptions(hours)}</select>
+              <select value={this.state.minSpend} name="minSpend" onChange={this.onChangeHandler}>{getOptions(minutes)}</select>
+            </div>
+          </div>
+
+          <div className="colWrapper">
+            <div className="col5">
+              <label>Activity Description</label>
+              <textarea rows="5" value={this.state.description} name="description" onChange={this.onChangeHandler} maxLength="180" placeholder="Use T# or t# in your description to indicate Redmine ticket/task. For example : T#1234">
+              </textarea>
+            </div>
+            <div className="col5">
+              <p>Enter the actual number of hours against each of your project(s). If you're working on multiple projects, submit separate entry for each project. 
+                If you're not assigned to a project, select the option "N/A" from Project drop down.
+                You should book the time against a project if you are contributing your effort, whether you are allocated or not. If you have been working on the project regularly, ask the PM to formally allocate you.</p>
+              <p>Please make sure you're not booking time for organizational (non project) activities like pre-sales, trainings, your non project related self learning activity to any project.</p>
             </div>
           </div>
           <div className="saveBtnDiv">
-            <button onClick={this.onAddActivity.bind(this)}>Add Daily Status</button>
+            <button onClick={this.onAddActivity} disabled={!this.state.description}>Add Daily Status</button>
           </div>
       </div>
       </div>

@@ -37,6 +37,17 @@ h1 {
 			width: 40%;
 			padding: 10px;
 		}
+		.col5 {
+		    width: 47%;
+		    float: left;
+		    margin: 0 15px;
+		    textarea {
+		    	width: 100%;
+		    }
+		    p{
+		    	padding-top: 10px;
+		    }		    
+		}
 		label {
 			display: block;
 		    margin-bottom: 6px;
@@ -64,10 +75,16 @@ h1 {
 		button {
 			color: #fff;
 			cursor: pointer;
-		    background-color: #275b89;
-		    border-color: #1f496d;
+		    background-color: #3276b1;
+		    border: 1px solid #3276b1;
 		    padding: 7px;
 		    font-size: 14px;
+		    &:disabled {
+		    	color: #404040;
+			    background-color: #ddd;
+			    border: 1px solid #ddd;
+		    	cursor: default;
+			}
 		}
 	}
 	

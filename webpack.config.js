@@ -11,14 +11,9 @@ module.exports = {
     devtool: 'cheap-module-source-map',
     module: {
         rules: [{
-            test: /\.jsx?$/,
-            use: [{
-                loader:'babel-loader',
-                query:
-                {
-                    presets:['react']
-                }
-          }]
+            test: /\.(js|jsx)$/,
+            use: ['babel-loader'],
+            exclude: /node_modules/
         }, {
             test: /\.scss$/,
             use: ExtractTextPlugin.extract({
@@ -68,7 +63,7 @@ module.exports = {
         hot: true,
         inline: true,
         compress: true,
-        port: 3060,
+        port: 3070,
         historyApiFallback: true
     },
     plugins: [
