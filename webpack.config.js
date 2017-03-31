@@ -63,7 +63,7 @@ module.exports = {
         hot: true,
         inline: true,
         compress: true,
-        port: 3070,
+        port: 3010,
         historyApiFallback: true
     },
     plugins: [

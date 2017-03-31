@@ -65,6 +65,7 @@ class AddDailyStatusComponent extends React.Component {
                           "description": this.state.description
                         };
     this.props.onCreateActivity(myActivity);
+    this.setState({"description": ""});
   };
 
   render() {
