@@ -8,13 +8,10 @@ class AddDailyStatusComponent extends React.Component {
 
     // Populate the last 7 days dates
     let datesArr = [];
-    let curr = new Date; // get current date
-    let first = curr.getDate(); // First day is the day of the month - the day of the week
-    let last = first - 6; // last day is the first day + 6
-
     for ( let i = 0; i < 7; i++) {
-      let day = new Date(curr.setDate(last + i));
-      datesArr.push(day.getDate() + "/" + (day.getMonth() + 1) + "/" + day.getFullYear());
+      var date = new Date();
+      var last = new Date(date.getTime() - (i * 24 * 60 * 60 * 1000));
+      datesArr.unshift(last.getDate() + "/" + (last.getMonth() + 1) + "/" + last.getFullYear());
     }
 
     // Populate the projects
@@ -33,7 +30,7 @@ class AddDailyStatusComponent extends React.Component {
        activityTypeArr.push(statusInputJson.activityTypes[i]);
     }
 
-    const hoursArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16"];
+    const hoursArr = ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16"];
     const minutesArr = ["00", "15", "30", "45"];
 
     this.state = {
@@ -45,7 +42,7 @@ class AddDailyStatusComponent extends React.Component {
       date: datesArr[6],
       project: projectsArr[0],
       actType: activityTypeArr[0],
-      hrSpend: hoursArr[7],
+      hrSpend: hoursArr[8],
       minSpend: minutesArr[0],
       description: ""
 
@@ -78,53 +75,75 @@ class AddDailyStatusComponent extends React.Component {
   setDateTime() {
     let actArr = this.props.activities;
     let dateIndex = this.state.dateOptions.indexOf(this.state.date);
-    if (dateIndex !== 6) {
+    let actDate = this.state.date;
       if (parseInt(this.state.hrSpend) < 8) {
         if (actArr.length) {
-          if (actArr[0].date === this.state.date) {
-            let totoalHr = parseInt(actArr[0].hrSpend) + parseInt(this.state.hrSpend);
-            let totoalMin = parseInt(actArr[0].minSpend) + parseInt(this.state.minSpend);
-            if (totoalMin === 60) {
-              totoalHr++;
-              totoalMin = "00";
-            }
+          // Check whether the same date added
+          let sameDateArr = actArr.filter(function( obj ) {
+            return obj.date === actDate;
+          });
+          let totalHr = 0;
+          for (let value of sameDateArr) {
+            totalHr += parseInt(value.hrSpend) + parseInt(value.minSpend) / 100;
+          }
+          totalHr += parseInt(this.state.hrSpend) + parseInt(this.state.minSpend) / 100;
+          let totalTimeSpend = this.getTotalTime(totalHr);
 
-            if (totoalHr < 8) {
-              let tempHr = "0" + totoalHr;
-              let tempMin = totoalMin;
-
-              if (tempMin === "00" ||  tempMin === 0) {
-                this.setState({hrSpend: "0" + ( 8 - parseInt (tempHr))});
-              }
-              else {
-                this.setState({hrSpend: "0" + ( 7 - parseInt (tempHr)),
-                               minSpend: 60 - parseInt( tempMin)});
-              }
+          if (totalTimeSpend < 8) {
+            let totalTimeArr = String(totalTimeSpend).split(".");
+            if (totalTimeArr[1] === "00" ) {
+              this.setState({hrSpend: "0" + ( 8 - parseInt (totalTimeArr[0])),
+                             minSpend: "00"});
             }
             else {
-              this.setState({date: this.state.dateOptions[dateIndex + 1],
-                             hrSpend: this.state.hoursArr[7],
-                             minSpend: this.state.minutesArr[0]});
+              this.setState({hrSpend: "0" + ( 7 - parseInt (totalTimeArr[0])),
+                             minSpend: 60 - parseInt( totalTimeArr[1])});
             }
           }
           else {
-            this.changeHrMin();
+            if (dateIndex !== 6) {
+              this.setState({date: this.state.dateOptions[dateIndex + 1],
+                           hrSpend: this.state.hoursArr[8],
+                           minSpend: this.state.minutesArr[0]});
+            }
+            else {
+              this.setState({hrSpend: this.state.hoursArr[8],
+                           minSpend: this.state.minutesArr[0]});
+            }
           }
         }
         else {
           this.changeHrMin();
         }
       }
-      else {
-        this.setState({date: this.state.dateOptions[dateIndex + 1]});
+      else { // Reset the time and Change to next date
+          this.setState({date: this.state.dateOptions[dateIndex + 1],
+                         hrSpend: this.state.hoursArr[8],
+                         minSpend: this.state.minutesArr[0]});
       }
+  };
+
+  // Set the total number to hr min value
+  getTotalTime(time) {
+    let timeArr = String(time).split(".");
+    if (timeArr.length === 1)
+      timeArr.push("00");
+    if (timeArr[1].length === 1)
+      timeArr[1] = timeArr[1] + "0";
+    if (parseInt(timeArr[1]) > 59) {
+      var min = parseInt(timeArr[1]);
+      var hr = Math.floor(min / 60);
+      var hrTemp = Math.floor(parseInt(timeArr[0]));
+      var remMin = min % 60;
+      let totalTime = Number((hr + hrTemp) + "." + remMin).toFixed(2);
+      return totalTime;
     }
     else {
-      this.setState({hrSpend: this.state.hoursArr[7],
-                     minSpend: this.state.minutesArr[0]});
+      return time.toFixed(2);
     }
   };
 
+  // Reset the hr min dropdown based on the value
   changeHrMin() {
     if (this.state.minSpend === "00" ) {
       this.setState({hrSpend: "0" + ( 8 - parseInt (this.state.hrSpend))});
